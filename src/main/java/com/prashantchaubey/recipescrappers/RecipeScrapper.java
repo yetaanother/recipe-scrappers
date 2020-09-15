@@ -1,11 +1,13 @@
 package com.prashantchaubey.recipescrappers;
 
+import java.util.List;
+
 public interface RecipeScrapper {
   String getHost();
 
   String getTitle();
 
-  String getTotalTime();
+  int getTotalTime();
 
   String getYields();
 
@@ -13,15 +15,15 @@ public interface RecipeScrapper {
 
   String getLanguage();
 
-  String getIngredients();
+  List<String> getIngredients();
 
   String getInstructions();
 
-  String getRatings();
+  double getRatings();
 
   String getAuthor();
 
   String getReviews();
 
-  String getLinks();
+  List<String> getLinks();
 }

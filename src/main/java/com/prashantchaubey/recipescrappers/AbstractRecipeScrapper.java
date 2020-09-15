@@ -1,5 +1,7 @@
 package com.prashantchaubey.recipescrappers;
 
+import java.util.List;
+
 public abstract class AbstractRecipeScrapper implements RecipeScrapper {
   private String host;
 
@@ -18,7 +20,7 @@ public abstract class AbstractRecipeScrapper implements RecipeScrapper {
   }
 
   @Override
-  public String getTotalTime() {
+  public int getTotalTime() {
     throw new UnsupportedOperationException();
   }
 
@@ -38,7 +40,7 @@ public abstract class AbstractRecipeScrapper implements RecipeScrapper {
   }
 
   @Override
-  public String getIngredients() {
+  public List<String> getIngredients() {
     throw new UnsupportedOperationException();
   }
 
@@ -48,7 +50,7 @@ public abstract class AbstractRecipeScrapper implements RecipeScrapper {
   }
 
   @Override
-  public String getRatings() {
+  public double getRatings() {
     throw new UnsupportedOperationException();
   }
 
@@ -63,7 +65,7 @@ public abstract class AbstractRecipeScrapper implements RecipeScrapper {
   }
 
   @Override
-  public String getLinks() {
+  public List<String> getLinks() {
     throw new UnsupportedOperationException();
   }
 }
