@@ -1,4 +1,4 @@
-package com.prashantchaubey.recipescrappers;
+package com.prashantchaubey.recipescrappers.utils;
 
 public final class RecipeScrapperConstants {
   private RecipeScrapperConstants() {

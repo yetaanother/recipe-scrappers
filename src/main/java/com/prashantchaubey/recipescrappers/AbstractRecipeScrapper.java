@@ -3,20 +3,17 @@ package com.prashantchaubey.recipescrappers;
 import java.util.List;
 
 public abstract class AbstractRecipeScrapper implements RecipeScrapper {
-  private String host;
+  private String htmlContent;
+  private String uri;
 
-  public AbstractRecipeScrapper(String host) {
-    this.host = host;
+  public AbstractRecipeScrapper(String uri, RecipeHtmlContentProvider contentProvider) {
+    this.uri = uri;
+    this.htmlContent = contentProvider.get(uri);
   }
 
   @Override
-  public String getHost() {
-    return host;
-  }
-
-  @Override
-  public String getTitle() {
-    throw new UnsupportedOperationException();
+  public String getUri() {
+    return uri;
   }
 
   @Override

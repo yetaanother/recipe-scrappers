@@ -3,6 +3,8 @@ package com.prashantchaubey.recipescrappers;
 import java.util.List;
 
 public interface RecipeScrapper {
+  String getUri();
+
   String getHost();
 
   String getTitle();
