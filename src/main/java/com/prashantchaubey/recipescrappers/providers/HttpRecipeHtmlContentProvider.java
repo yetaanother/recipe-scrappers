@@ -1,5 +1,6 @@
-package com.prashantchaubey.recipescrappers;
+package com.prashantchaubey.recipescrappers.providers;
 
+import com.prashantchaubey.recipescrappers.exceptions.NotAbleToExtractHtmlException;
 import com.prashantchaubey.recipescrappers.utils.RecipeScrapperUtils;
 
 import java.io.BufferedReader;

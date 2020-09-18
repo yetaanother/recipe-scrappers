@@ -1,6 +1,7 @@
 package com.prashantchaubey.recipescrappers.utils;
 
-import com.prashantchaubey.recipescrappers.InvalidURLException;
+import com.prashantchaubey.recipescrappers.exceptions.InvalidURLException;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,5 +39,11 @@ public final class RecipeScrapperUtils {
 
   public static Map<String, String> getUserHeaders() {
     return USER_HEADERS;
+  }
+
+  public static String normalize(String input) {
+    input = StringEscapeUtils.unescapeHtml4(input);
+    input = input.replace("\\xa0", " ").replace("\n", " ").replace("\t", " ").trim();
+    return input.replace("\\s+", " ");
   }
 }

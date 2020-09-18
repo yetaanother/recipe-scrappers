@@ -1,13 +1,14 @@
-package com.prashantchaubey.recipescrappers;
+package com.prashantchaubey.recipescrappers.decorators;
+
+import com.prashantchaubey.recipescrappers.RecipeScrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class DefaultOnErrorRecipeScrapper implements RecipeScrapper {
-  private RecipeScrapper recipeScrapper;
-
-  public DefaultOnErrorRecipeScrapper(RecipeScrapper recipeScrapper) {
-    this.recipeScrapper = recipeScrapper;
+public class DefaultOnErrorDecorator extends DecoratorBase {
+  public DefaultOnErrorDecorator(RecipeScrapper recipeScrapper) {
+    super(recipeScrapper);
   }
 
   @Override
@@ -20,47 +21,47 @@ public class DefaultOnErrorRecipeScrapper implements RecipeScrapper {
   }
 
   @Override
-  public String getTitle() {
+  public Optional<String> getTitle() {
     try {
       return recipeScrapper.getTitle();
     } catch (Exception e) {
-      return "";
+      return Optional.empty();
     }
   }
 
   @Override
-  public int getTotalTime() {
+  public Optional<Integer> getTotalTime() {
     try {
       return recipeScrapper.getTotalTime();
     } catch (Exception e) {
-      return 0;
+      return Optional.empty();
     }
   }
 
   @Override
-  public String getYields() {
+  public Optional<String> getYields() {
     try {
       return recipeScrapper.getYields();
     } catch (Exception e) {
-      return "";
+      return Optional.empty();
     }
   }
 
   @Override
-  public String getImageURL() {
+  public Optional<String> getImageURL() {
     try {
       return recipeScrapper.getImageURL();
     } catch (Exception e) {
-      return "";
+      return Optional.empty();
     }
   }
 
   @Override
-  public String getLanguage() {
+  public Optional<String> getLanguage() {
     try {
       return recipeScrapper.getLanguage();
     } catch (Exception e) {
-      return "en";
+      return Optional.of("en");
     }
   }
 
@@ -74,38 +75,38 @@ public class DefaultOnErrorRecipeScrapper implements RecipeScrapper {
   }
 
   @Override
-  public String getInstructions() {
+  public Optional<String> getInstructions() {
     try {
       return recipeScrapper.getInstructions();
     } catch (Exception e) {
-      return "";
+      return Optional.empty();
     }
   }
 
   @Override
-  public double getRatings() {
+  public Optional<Double> getRatings() {
     try {
       return recipeScrapper.getRatings();
     } catch (Exception e) {
-      return -1;
+      return Optional.empty();
     }
   }
 
   @Override
-  public String getAuthor() {
+  public Optional<String> getAuthor() {
     try {
       return recipeScrapper.getAuthor();
     } catch (Exception e) {
-      return "";
+      return Optional.empty();
     }
   }
 
   @Override
-  public String getReviews() {
+  public Optional<String> getReviews() {
     try {
       return recipeScrapper.getReviews();
     } catch (Exception e) {
-      return "";
+      return Optional.empty();
     }
   }
 

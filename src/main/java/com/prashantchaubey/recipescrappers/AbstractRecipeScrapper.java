@@ -1,14 +1,21 @@
 package com.prashantchaubey.recipescrappers;
 
-import java.util.List;
+import com.prashantchaubey.recipescrappers.providers.RecipeHtmlContentProvider;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class AbstractRecipeScrapper implements RecipeScrapper {
-  private String htmlContent;
   private String uri;
+  private Document dom;
 
   public AbstractRecipeScrapper(String uri, RecipeHtmlContentProvider contentProvider) {
     this.uri = uri;
-    this.htmlContent = contentProvider.get(uri);
+    this.dom = Jsoup.parse(contentProvider.get(uri));
   }
 
   @Override
@@ -17,52 +24,30 @@ public abstract class AbstractRecipeScrapper implements RecipeScrapper {
   }
 
   @Override
-  public int getTotalTime() {
-    throw new UnsupportedOperationException();
-  }
+  public Optional<String> getLanguage() {
+    Element html = dom.selectFirst("html[lang]");
+    if (html == null) {
+      return Optional.empty();
+    }
 
-  @Override
-  public String getYields() {
-    throw new UnsupportedOperationException();
-  }
+    String language = html.attr("lang").trim();
 
-  @Override
-  public String getImageURL() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public String getLanguage() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public List<String> getIngredients() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public String getInstructions() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public double getRatings() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public String getAuthor() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public String getReviews() {
-    throw new UnsupportedOperationException();
+    return language.isEmpty() ? Optional.empty() : Optional.of(language);
   }
 
   @Override
   public List<String> getLinks() {
-    throw new UnsupportedOperationException();
+    Set<String> invalidLinks = new HashSet<>(Arrays.asList("", "#"));
+    Elements anchors = dom.select("a[href]");
+
+    return anchors.stream()
+        .map(el -> el.attr("href"))
+        .filter(val -> !invalidLinks.contains(val))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public Document getDOM() {
+    return dom;
   }
 }

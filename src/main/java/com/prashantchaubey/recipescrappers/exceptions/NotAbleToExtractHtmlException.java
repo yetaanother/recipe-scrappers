@@ -1,4 +1,4 @@
-package com.prashantchaubey.recipescrappers;
+package com.prashantchaubey.recipescrappers.exceptions;
 
 public class NotAbleToExtractHtmlException extends RuntimeException {
     public NotAbleToExtractHtmlException(Throwable cause) {

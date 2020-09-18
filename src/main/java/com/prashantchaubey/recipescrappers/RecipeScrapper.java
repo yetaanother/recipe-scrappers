@@ -1,31 +1,36 @@
 package com.prashantchaubey.recipescrappers;
 
+import org.jsoup.nodes.Document;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface RecipeScrapper {
   String getUri();
 
   String getHost();
 
-  String getTitle();
+  Optional<String> getTitle();
 
-  int getTotalTime();
+  Optional<Integer> getTotalTime();
 
-  String getYields();
+  Optional<String> getYields();
 
-  String getImageURL();
+  Optional<String> getImageURL();
 
-  String getLanguage();
+  Optional<String> getLanguage();
 
   List<String> getIngredients();
 
-  String getInstructions();
+  Optional<String> getInstructions();
 
-  double getRatings();
+  Optional<Double> getRatings();
 
-  String getAuthor();
+  Optional<String> getAuthor();
 
-  String getReviews();
+  Optional<String> getReviews();
 
   List<String> getLinks();
+
+  Document getDOM();
 }
