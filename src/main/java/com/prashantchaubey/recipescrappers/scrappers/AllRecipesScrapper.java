@@ -45,8 +45,8 @@ public class AllRecipesScrapper extends AbstractRecipeScrapper {
   }
 
   @Override
-  public Optional<String> getInstructions() {
-    return Optional.empty();
+  public List<String> getInstructions() {
+    return new ArrayList<>();
   }
 
   @Override

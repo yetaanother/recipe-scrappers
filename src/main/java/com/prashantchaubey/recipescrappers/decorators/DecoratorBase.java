@@ -54,7 +54,7 @@ public class DecoratorBase implements RecipeScrapper {
   }
 
   @Override
-  public Optional<String> getInstructions() {
+  public List<String> getInstructions() {
     return recipeScrapper.getInstructions();
   }
 
@@ -81,5 +81,10 @@ public class DecoratorBase implements RecipeScrapper {
   @Override
   public Document getDOM() {
     return recipeScrapper.getDOM();
+  }
+
+  @Override
+  public String getHtmlContent() {
+    return recipeScrapper.getHtmlContent();
   }
 }

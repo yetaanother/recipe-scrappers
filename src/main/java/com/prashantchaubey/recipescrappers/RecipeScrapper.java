@@ -22,7 +22,7 @@ public interface RecipeScrapper {
 
   List<String> getIngredients();
 
-  Optional<String> getInstructions();
+  List<String> getInstructions();
 
   Optional<Double> getRatings();
 
@@ -33,4 +33,6 @@ public interface RecipeScrapper {
   List<String> getLinks();
 
   Document getDOM();
+
+  String getHtmlContent();
 }

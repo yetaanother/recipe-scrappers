@@ -12,15 +12,6 @@ public class DefaultOnErrorDecorator extends DecoratorBase {
   }
 
   @Override
-  public String getHost() {
-    try {
-      return recipeScrapper.getHost();
-    } catch (Exception e) {
-      return "";
-    }
-  }
-
-  @Override
   public Optional<String> getTitle() {
     try {
       return recipeScrapper.getTitle();
@@ -75,11 +66,11 @@ public class DefaultOnErrorDecorator extends DecoratorBase {
   }
 
   @Override
-  public Optional<String> getInstructions() {
+  public List<String> getInstructions() {
     try {
       return recipeScrapper.getInstructions();
     } catch (Exception e) {
-      return Optional.empty();
+      return new ArrayList<>();
     }
   }
 

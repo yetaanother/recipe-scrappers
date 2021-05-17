@@ -12,10 +12,12 @@ import java.util.stream.Collectors;
 public abstract class AbstractRecipeScrapper implements RecipeScrapper {
   private String uri;
   private Document dom;
+  private String htmlContent;
 
   public AbstractRecipeScrapper(String uri, RecipeHtmlContentProvider contentProvider) {
     this.uri = uri;
-    this.dom = Jsoup.parse(contentProvider.get(uri));
+    this.htmlContent = contentProvider.get(uri);
+    this.dom = Jsoup.parse(htmlContent);
   }
 
   @Override
@@ -49,5 +51,10 @@ public abstract class AbstractRecipeScrapper implements RecipeScrapper {
   @Override
   public Document getDOM() {
     return dom;
+  }
+
+  @Override
+  public String getHtmlContent() {
+    return htmlContent;
   }
 }

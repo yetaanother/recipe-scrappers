@@ -1,9 +1,7 @@
 package com.prashantchaubey.recipescrappers.utils;
 
 public final class RecipeScrapperConstants {
-  private RecipeScrapperConstants() {
-    throw new IllegalStateException("This should never be constructed");
-  }
+  private RecipeScrapperConstants() {}
 
   public static final String SCRAPPER_IMPLEMENTATIONS_PACKAGE =
       "com.prashantchaubey.recipescrappers.scrappers";

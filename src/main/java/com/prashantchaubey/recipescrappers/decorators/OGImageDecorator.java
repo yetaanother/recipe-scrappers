@@ -3,7 +3,6 @@ package com.prashantchaubey.recipescrappers.decorators;
 import com.prashantchaubey.recipescrappers.RecipeScrapper;
 import org.jsoup.nodes.Element;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public class OGImageDecorator extends DecoratorBase {
