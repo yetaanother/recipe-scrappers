@@ -5,7 +5,8 @@ import com.prashantchaubey.recipescrappers.exceptions.ScrapperNotImplementedExce
 import com.prashantchaubey.recipescrappers.providers.RecipeHtmlContentProvider;
 import com.prashantchaubey.recipescrappers.scrappers.AllRecipesScrapper;
 import com.prashantchaubey.recipescrappers.utils.RecipeScrapperConstants;
-import com.prashantchaubey.recipescrappers.utils.RecipeScrapperUtils;
+
+import java.net.URI;
 
 public final class RecipeScrapperFactory {
   private RecipeScrapperFactory() {
@@ -14,15 +15,13 @@ public final class RecipeScrapperFactory {
 
   public static RecipeScrapper get(
       String url, RecipeHtmlContentProvider contentProvider, boolean defaultValues) {
-    String host = RecipeScrapperUtils.getHost(url.replace("://www.", "://"));
+    String host = URI.create(url.replace("://www.", "://")).getHost();
     RecipeScrapper recipeScrapper;
-    switch (host) {
-      case RecipeScrapperConstants.WebsiteHost.ALL_RECIPES:
-        recipeScrapper = new AllRecipesScrapper(url, contentProvider);
-        break;
-      default:
-        throw new ScrapperNotImplementedException(
-            String.format("Scrapper not implemented for host: [%s]", host));
+    if (RecipeScrapperConstants.WebsiteHost.ALL_RECIPES.equals(host)) {
+      recipeScrapper = new AllRecipesScrapper(url, contentProvider);
+    } else {
+      throw new ScrapperNotImplementedException(
+          String.format("Scrapper not implemented for host: [%s]", host));
     }
 
     return applyDecorators(recipeScrapper, defaultValues);
