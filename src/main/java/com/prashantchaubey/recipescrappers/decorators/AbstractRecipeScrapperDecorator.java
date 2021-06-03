@@ -6,10 +6,10 @@ import org.jsoup.nodes.Document;
 import java.util.List;
 import java.util.Optional;
 
-public class DecoratorBase implements RecipeScrapper {
+public abstract class AbstractRecipeScrapperDecorator implements RecipeScrapper {
   protected RecipeScrapper recipeScrapper;
 
-  public DecoratorBase(RecipeScrapper recipeScrapper) {
+  public AbstractRecipeScrapperDecorator(RecipeScrapper recipeScrapper) {
     this.recipeScrapper = recipeScrapper;
   }
 

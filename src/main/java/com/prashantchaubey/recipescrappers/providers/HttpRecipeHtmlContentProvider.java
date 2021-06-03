@@ -13,8 +13,8 @@ public class HttpRecipeHtmlContentProvider implements RecipeHtmlContentProvider 
   private static final int DEFAULT_TIMEOUT_IN_SECS = 5;
   private static final boolean DEFAULT_FOLLOW_REDICRECTS = true;
 
-  private int timeoutInMillis;
-  private boolean followRedirects;
+  private final int timeoutInMillis;
+  private final boolean followRedirects;
 
   public HttpRecipeHtmlContentProvider() {
     this.timeoutInMillis = DEFAULT_TIMEOUT_IN_SECS * 1000;
@@ -50,8 +50,7 @@ public class HttpRecipeHtmlContentProvider implements RecipeHtmlContentProvider 
       if (conn != null) {
         try {
           conn.disconnect();
-        } catch (Exception e) {
-          // do nothing
+        } catch (Exception ignored) {
         }
       }
     }

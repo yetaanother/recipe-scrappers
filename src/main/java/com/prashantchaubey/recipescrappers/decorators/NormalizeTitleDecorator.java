@@ -5,7 +5,7 @@ import com.prashantchaubey.recipescrappers.utils.RecipeScrapperUtils;
 
 import java.util.Optional;
 
-public class NormalizeTitleDecorator extends DecoratorBase {
+public class NormalizeTitleDecorator extends AbstractRecipeScrapperDecorator {
   public NormalizeTitleDecorator(RecipeScrapper recipeScrapper) {
     super(recipeScrapper);
   }

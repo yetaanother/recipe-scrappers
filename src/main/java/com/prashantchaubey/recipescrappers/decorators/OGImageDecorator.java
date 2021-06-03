@@ -5,7 +5,7 @@ import org.jsoup.nodes.Element;
 
 import java.util.Optional;
 
-public class OGImageDecorator extends DecoratorBase {
+public class OGImageDecorator extends AbstractRecipeScrapperDecorator {
   public OGImageDecorator(RecipeScrapper recipeScrapper) {
     super(recipeScrapper);
   }

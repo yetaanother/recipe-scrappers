@@ -1,7 +1,9 @@
 package com.prashantchaubey.recipescrappers;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.prashantchaubey.recipescrappers.decorators.*;
 import com.prashantchaubey.recipescrappers.exceptions.ScrapperNotImplementedException;
+import com.prashantchaubey.recipescrappers.providers.HttpRecipeHtmlContentProvider;
 import com.prashantchaubey.recipescrappers.providers.RecipeHtmlContentProvider;
 import com.prashantchaubey.recipescrappers.scrappers.AllRecipesScrapper;
 import com.prashantchaubey.recipescrappers.utils.RecipeScrapperConstants;
@@ -9,11 +11,14 @@ import com.prashantchaubey.recipescrappers.utils.RecipeScrapperConstants;
 import java.net.URI;
 
 public final class RecipeScrapperFactory {
-  private RecipeScrapperFactory() {
-    throw new IllegalStateException("This should never be constructed");
+  private RecipeScrapperFactory() {}
+
+  public static RecipeScrapper get(String url) {
+    return get(url, new HttpRecipeHtmlContentProvider(), true);
   }
 
-  public static RecipeScrapper get(
+  @VisibleForTesting
+  static RecipeScrapper get(
       String url, RecipeHtmlContentProvider contentProvider, boolean defaultValues) {
     String host = URI.create(url.replace("://www.", "://")).getHost();
     RecipeScrapper recipeScrapper;

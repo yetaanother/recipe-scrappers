@@ -6,7 +6,7 @@ import org.apache.commons.lang3.LocaleUtils;
 import java.util.Locale;
 import java.util.Optional;
 
-public class LanguageValidatorDecorator extends DecoratorBase {
+public class LanguageValidatorDecorator extends AbstractRecipeScrapperDecorator {
   public LanguageValidatorDecorator(RecipeScrapper recipeScrapper) {
     super(recipeScrapper);
   }
@@ -14,7 +14,7 @@ public class LanguageValidatorDecorator extends DecoratorBase {
   @Override
   public Optional<String> getLanguage() {
     Optional<String> maybeLanguage = recipeScrapper.getLanguage();
-    if (!maybeLanguage.isPresent()) {
+    if (maybeLanguage.isEmpty()) {
       return Optional.empty();
     }
 

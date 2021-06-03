@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DefaultOnErrorDecorator extends DecoratorBase {
+public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
   public DefaultOnErrorDecorator(RecipeScrapper recipeScrapper) {
     super(recipeScrapper);
   }

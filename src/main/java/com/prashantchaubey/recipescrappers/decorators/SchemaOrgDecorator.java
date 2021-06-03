@@ -9,14 +9,17 @@ import org.apache.any23.source.StringDocumentSource;
 import org.apache.any23.writer.JSONLDWriter;
 import org.apache.any23.writer.TripleHandler;
 import org.apache.any23.writer.TripleHandlerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SchemaOrgDecorator extends DecoratorBase {
-  private Map<String, Object> metadata;
+public class SchemaOrgDecorator extends AbstractRecipeScrapperDecorator {
+  private static final Logger LOG = LoggerFactory.getLogger(SchemaOrgDecorator.class);
+  private final Map<String, Object> metadata;
 
   public SchemaOrgDecorator(RecipeScrapper recipeScrapper) {
     super(recipeScrapper);
@@ -27,7 +30,8 @@ public class SchemaOrgDecorator extends DecoratorBase {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     try (TripleHandler handler = new JSONLDWriter(out)) {
       any23.extract(source, handler);
-    } catch (ExtractionException | IOException | TripleHandlerException ignored) {
+    } catch (ExtractionException | IOException | TripleHandlerException e) {
+      LOG.error("Error in extracting metadata", e);
     }
     String output = out.toString();
   }
@@ -42,32 +46,27 @@ public class SchemaOrgDecorator extends DecoratorBase {
 
   @Override
   public Optional<Integer> getTotalTime() {
-    try {
-      if (metadata.containsKey("totalTime")) {
-        int totalTime =
-            RecipeScrapperUtils.extractMinutesForSchemaOrg(
-                    String.valueOf(metadata.get("totalTime")))
-                .orElse(0);
-        if (totalTime != 0) {
-          return Optional.of(totalTime);
-        }
+    if (metadata.containsKey("totalTime")) {
+      int totalTime =
+          RecipeScrapperUtils.extractMinutesForSchemaOrg(String.valueOf(metadata.get("totalTime")))
+              .orElse(0);
+      if (totalTime != 0) {
+        return Optional.of(totalTime);
       }
-
-      if (metadata.containsKey("prepTime") || metadata.containsKey("cookTime")) {
-        int prepTime =
-            RecipeScrapperUtils.extractMinutesForSchemaOrg(String.valueOf(metadata.get("prepTime")))
-                .orElse(0);
-        int cookTime =
-            RecipeScrapperUtils.extractMinutesForSchemaOrg(String.valueOf(metadata.get("cookTime")))
-                .orElse(0);
-        int totalTime = prepTime + cookTime;
-        if (totalTime != 0) {
-          return Optional.of(totalTime);
-        }
-      }
-    } catch (Exception ignored) {
     }
 
+    if (metadata.containsKey("prepTime") || metadata.containsKey("cookTime")) {
+      int prepTime =
+          RecipeScrapperUtils.extractMinutesForSchemaOrg(String.valueOf(metadata.get("prepTime")))
+              .orElse(0);
+      int cookTime =
+          RecipeScrapperUtils.extractMinutesForSchemaOrg(String.valueOf(metadata.get("cookTime")))
+              .orElse(0);
+      int totalTime = prepTime + cookTime;
+      if (totalTime != 0) {
+        return Optional.of(totalTime);
+      }
+    }
     return recipeScrapper.getTotalTime();
   }
 
@@ -77,8 +76,7 @@ public class SchemaOrgDecorator extends DecoratorBase {
       Object yieldObj = metadata.get("recipeYield");
       String yield;
       if (yieldObj instanceof List) {
-        //noinspection unchecked
-        List<Object> yieldList = (List<Object>) yieldObj;
+        List<?> yieldList = (List<?>) yieldObj;
         if (yieldList.isEmpty()) {
           return recipeScrapper.getYields();
         }
@@ -90,7 +88,7 @@ public class SchemaOrgDecorator extends DecoratorBase {
         return Optional.of(yield + " serving(s)");
       }
       if (yield.contains(System.lineSeparator())) {
-        String yieldSplits[] = yield.split(System.lineSeparator());
+        String[] yieldSplits = yield.split(System.lineSeparator());
         return Optional.of(yieldSplits[yieldSplits.length - 1]);
       }
       return Optional.of(yield);
@@ -103,20 +101,17 @@ public class SchemaOrgDecorator extends DecoratorBase {
     if (metadata.containsKey("image")) {
       Object imageObj = metadata.get("image");
       if (imageObj instanceof Map) {
-        //noinspection unchecked
-        Map<String, Object> imageMap = (Map<String, Object>) imageObj;
+        Map<?, ?> imageMap = (Map<?, ?>) imageObj;
         if (imageMap.containsKey("url")) {
           return Optional.of(String.valueOf(imageMap.get("url")));
         }
       }
       if (imageObj instanceof List) {
-        //noinspection unchecked
-        List<Object> imageList = (List<Object>) imageObj;
+        List<?> imageList = (List<?>) imageObj;
         if (!imageList.isEmpty()) {
           Object imageListFirst = imageList.get(0);
           if (imageListFirst instanceof Map) {
-            //noinspection unchecked
-            Map<String, Object> imageListFirstMap = (Map<String, Object>) imageListFirst;
+            Map<?, ?> imageListFirstMap = (Map<?, ?>) imageListFirst;
             if (imageListFirstMap.containsKey("url")) {
               return Optional.of(String.valueOf(imageListFirstMap.get("url")));
             }
@@ -145,10 +140,8 @@ public class SchemaOrgDecorator extends DecoratorBase {
   public List<String> getIngredients() {
     List<String> ingredients = new ArrayList<>();
     if (metadata.containsKey("recipeIngredient")) {
-      //noinspection unchecked
       ingredients = (List<String>) metadata.get("recipeIngredient");
     } else if (metadata.containsKey("ingredients")) {
-      //noinspection unchecked
       ingredients = (List<String>) metadata.get("ingredients");
     }
     if (!ingredients.isEmpty()) {
@@ -162,13 +155,11 @@ public class SchemaOrgDecorator extends DecoratorBase {
     if (metadata.containsKey("recipeInstructions")) {
       Object instructionsObj = metadata.get("recipeInstructions");
       if (instructionsObj instanceof List) {
-        //noinspection unchecked
-        List<Object> instructionsList = (List<Object>) instructionsObj;
+        List<?> instructionsList = (List<?>) instructionsObj;
         return instructionsList.stream()
             .map(
                 val -> {
                   if (val instanceof Map) {
-                    // noinspection unchecked
                     return RecipeScrapperUtils.normalize(((Map<String, String>) val).get("text"));
                   }
                   return RecipeScrapperUtils.normalize(String.valueOf(val));
@@ -185,7 +176,6 @@ public class SchemaOrgDecorator extends DecoratorBase {
     if (metadata.containsKey("aggregateRating")) {
       Object ratingObj = metadata.get("aggregateRating");
       if (ratingObj instanceof Map) {
-        //noinspection unchecked
         Map<String, Double> ratingMap = (Map<String, Double>) ratingObj;
         if (ratingMap.containsKey("ratingValue")) {
           return Optional.of(ratingMap.get("ratingValue"));
@@ -202,10 +192,9 @@ public class SchemaOrgDecorator extends DecoratorBase {
     if (metadata.containsKey("author")) {
       Object authorObj = metadata.get("author");
       if (authorObj instanceof String) {
-        return Optional.of(String.valueOf(authorObj));
+        return Optional.of((String) authorObj);
       } else if (authorObj instanceof Map) {
-        // noinspection unchecked
-        Map<String, Object> authorMap = (Map<String, Object>) authorObj;
+        Map<?, ?> authorMap = (Map<?, ?>) authorObj;
         if (authorMap.containsKey("name")) {
           return Optional.of(String.valueOf(authorMap.get("name")));
         }
