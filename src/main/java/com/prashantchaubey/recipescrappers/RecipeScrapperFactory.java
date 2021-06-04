@@ -18,6 +18,10 @@ public final class RecipeScrapperFactory {
     return get(url, new HttpRecipeHtmlContentProvider(), true);
   }
 
+  public static RecipeScrapper get(String url, boolean defaultValues) {
+    return get(url, new HttpRecipeHtmlContentProvider(), defaultValues);
+  }
+
   @VisibleForTesting
   static RecipeScrapper get(
       String url, RecipeHtmlContentProvider contentProvider, boolean defaultValues) {
