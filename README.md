@@ -24,6 +24,9 @@ class ExampleApp {
 }
 ```
 
+## Scrappers available for
+* [https://www.acouplecooks.com/](https://www.acouplecooks.com/)
+
 ## Support
 
 If you need help feel free to create an issue, and I will reach out ASAP
