@@ -1,12 +1,16 @@
 package com.prashantchaubey.recipescrappers.decorators;
 
 import com.prashantchaubey.recipescrappers.RecipeScrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
+  private static final Logger LOG = LoggerFactory.getLogger(DefaultOnErrorDecorator.class);
+
   public DefaultOnErrorDecorator(RecipeScrapper recipeScrapper) {
     super(recipeScrapper);
   }
@@ -16,6 +20,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getTitle();
     } catch (Exception e) {
+      LOG.error("Error in getting title", e);
       return Optional.empty();
     }
   }
@@ -25,6 +30,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getTotalTime();
     } catch (Exception e) {
+      LOG.error("Error in getting total time", e);
       return Optional.empty();
     }
   }
@@ -34,6 +40,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getYields();
     } catch (Exception e) {
+      LOG.error("Error in getting yields", e);
       return Optional.empty();
     }
   }
@@ -43,6 +50,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getImageURL();
     } catch (Exception e) {
+      LOG.error("Error in getting image url", e);
       return Optional.empty();
     }
   }
@@ -52,6 +60,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getLanguage();
     } catch (Exception e) {
+      LOG.error("Error in getting language", e);
       return Optional.of("en");
     }
   }
@@ -61,6 +70,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getIngredients();
     } catch (Exception e) {
+      LOG.error("Error in getting ingredients", e);
       return new ArrayList<>();
     }
   }
@@ -70,6 +80,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getInstructions();
     } catch (Exception e) {
+      LOG.error("Error in getting instructions", e);
       return new ArrayList<>();
     }
   }
@@ -79,6 +90,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getRatings();
     } catch (Exception e) {
+      LOG.error("Error in getting ratings", e);
       return Optional.empty();
     }
   }
@@ -88,6 +100,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getAuthor();
     } catch (Exception e) {
+      LOG.error("Error in getting author", e);
       return Optional.empty();
     }
   }
@@ -97,6 +110,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getReviews();
     } catch (Exception e) {
+      LOG.error("Error in getting reviews", e);
       return Optional.empty();
     }
   }
@@ -106,6 +120,7 @@ public class DefaultOnErrorDecorator extends AbstractRecipeScrapperDecorator {
     try {
       return recipeScrapper.getLinks();
     } catch (Exception e) {
+      LOG.error("Error in getting links", e);
       return new ArrayList<>();
     }
   }

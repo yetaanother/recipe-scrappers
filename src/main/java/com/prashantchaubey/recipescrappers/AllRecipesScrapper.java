@@ -1,4 +1,4 @@
-package com.prashantchaubey.recipescrappers.scrappers;
+package com.prashantchaubey.recipescrappers;
 
 import com.prashantchaubey.recipescrappers.AbstractRecipeScrapper;
 import com.prashantchaubey.recipescrappers.providers.RecipeHtmlContentProvider;

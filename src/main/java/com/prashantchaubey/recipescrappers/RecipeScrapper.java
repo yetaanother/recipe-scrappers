@@ -10,6 +10,8 @@ public interface RecipeScrapper {
 
   String getHost();
 
+  String getCanonicalUri();
+
   Optional<String> getTitle();
 
   Optional<Integer> getTotalTime();
@@ -17,6 +19,8 @@ public interface RecipeScrapper {
   Optional<String> getYields();
 
   Optional<String> getImageURL();
+
+  List<String> getNutrients();
 
   Optional<String> getLanguage();
 
@@ -31,6 +35,8 @@ public interface RecipeScrapper {
   Optional<String> getReviews();
 
   List<String> getLinks();
+
+  Optional<String> getSiteName();
 
   Document getDOM();
 

@@ -24,6 +24,11 @@ public abstract class AbstractRecipeScrapperDecorator implements RecipeScrapper 
   }
 
   @Override
+  public String getCanonicalUri() {
+    return recipeScrapper.getCanonicalUri();
+  }
+
+  @Override
   public Optional<String> getTitle() {
     return recipeScrapper.getTitle();
   }
@@ -41,6 +46,11 @@ public abstract class AbstractRecipeScrapperDecorator implements RecipeScrapper 
   @Override
   public Optional<String> getImageURL() {
     return recipeScrapper.getImageURL();
+  }
+
+  @Override
+  public List<String> getNutrients() {
+    return recipeScrapper.getNutrients();
   }
 
   @Override
@@ -76,6 +86,11 @@ public abstract class AbstractRecipeScrapperDecorator implements RecipeScrapper 
   @Override
   public List<String> getLinks() {
     return recipeScrapper.getLinks();
+  }
+
+  @Override
+  public Optional<String> getSiteName() {
+    return recipeScrapper.getSiteName();
   }
 
   @Override

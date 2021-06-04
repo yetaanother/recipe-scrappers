@@ -2,38 +2,67 @@ package com.prashantchaubey.recipescrappers.decorators;
 
 import com.prashantchaubey.recipescrappers.RecipeScrapper;
 import com.prashantchaubey.recipescrappers.utils.RecipeScrapperUtils;
-import org.apache.any23.Any23;
-import org.apache.any23.extractor.ExtractionException;
-import org.apache.any23.source.DocumentSource;
-import org.apache.any23.source.StringDocumentSource;
-import org.apache.any23.writer.JSONLDWriter;
-import org.apache.any23.writer.TripleHandler;
-import org.apache.any23.writer.TripleHandlerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class SchemaOrgDecorator extends AbstractRecipeScrapperDecorator {
   private static final Logger LOG = LoggerFactory.getLogger(SchemaOrgDecorator.class);
-  private final Map<String, Object> metadata;
+  private Map<String, Object> metadata;
 
   public SchemaOrgDecorator(RecipeScrapper recipeScrapper) {
     super(recipeScrapper);
-    metadata = new HashMap<>();
-    Any23 any23 = new Any23();
-    DocumentSource source =
-        new StringDocumentSource(recipeScrapper.getHtmlContent(), recipeScrapper.getUri());
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    try (TripleHandler handler = new JSONLDWriter(out)) {
-      any23.extract(source, handler);
-    } catch (ExtractionException | IOException | TripleHandlerException e) {
-      LOG.error("Error in extracting metadata", e);
+    Map<String, Object> jsonLdSchema =
+        RecipeScrapperUtils.extractJsonLdSchema(recipeScrapper.getDOM());
+    try {
+      this.metadata = extractRecipeSchemaFromRoot(jsonLdSchema);
+    } catch (Exception e) {
+      LOG.error("Error in extracting recipe schema from json-ld", e);
+      this.metadata = Map.of();
     }
-    String output = out.toString();
+  }
+
+  private Map<String, Object> extractRecipeSchemaFromRoot(Map<String, Object> jsonLdSchema) {
+    Map<String, Object> recipeSchema = extractRecipeSchema(jsonLdSchema);
+    if (!recipeSchema.isEmpty()) {
+      return recipeSchema;
+    }
+
+    if (jsonLdSchema.containsKey("@graph")) {
+      List<Map<String, Object>> schemas =
+          (List<Map<String, Object>>) jsonLdSchema.getOrDefault("@graph", new ArrayList<>());
+      for (Map<String, Object> schema : schemas) {
+        recipeSchema = extractRecipeSchema(schema);
+        if (!recipeSchema.isEmpty()) {
+          return recipeSchema;
+        }
+      }
+    }
+
+    return Map.of();
+  }
+
+  private Map<String, Object> extractRecipeSchema(Map<String, Object> entity) {
+    String context = String.valueOf(entity.getOrDefault("@context", ""));
+    if (!context.contains("schema.org")) {
+      return Map.of();
+    }
+
+    Object type = entity.getOrDefault("@type", "");
+    if (!(type instanceof String)) {
+      return Map.of();
+    }
+
+    String typeInLowerCase = ((String) type).toLowerCase();
+    if (typeInLowerCase.equals("recipe")) {
+      return entity;
+    } else if (typeInLowerCase.equals("webpage")) {
+      return (Map<String, Object>) entity.get("mainEntity");
+    }
+
+    return Map.of();
   }
 
   @Override
