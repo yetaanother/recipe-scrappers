@@ -1,3 +1,8 @@
+# 🚨 Unmaintained 🚨
+
+**This project is no longer actively maintained.**  
+Feel free to fork it if you'd like to continue its development.
+
 # Recipe Scrappers
 
 Java package to scrap recipes from websites which follow Schema.org [recipe schema](https://schema.org/Recipe).
